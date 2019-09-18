@@ -23,13 +23,16 @@ def suggest_letter(words, used_letters, pattern)
     regex = Regexp.new("^#{pattern.gsub('_',not_letters)}$")
   end
   matching_words = words.select{|w|w =~ regex}
-
-  suggestions = {}
-  (('a'..'z').to_a-used_letters).each do |letter|
-    suggestions[letter] = matching_words.count{|w|w.chars.include? letter}
-  end
-  suggestions.max_by(4){|_,count|count}.each do |letter,count|
-    puts "#{letter} is present in #{count} known words"
+  if matching_words.size == 1
+    puts "Try: #{matching_words[0]}"
+  else
+    suggestions = {}
+    (('a'..'z').to_a-used_letters).each do |letter|
+      suggestions[letter] = matching_words.count{|w|w.chars.include? letter}
+    end
+    suggestions.max_by(4){|_,count|count}.each do |letter,count|
+      puts "#{letter} is present in #{count} known words"
+    end
   end
 end
 
